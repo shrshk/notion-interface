@@ -1,0 +1,9 @@
+{
+  "name": "notion-interface",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "node-fetch": "^3.3.0",
+    "serverless-domain-manager": "^6.2.1"
+  }
+}

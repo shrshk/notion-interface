@@ -1,0 +1,52 @@
+service: notion-interface
+
+frameworkVersion: '3'
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: ${file(variables/variables.yaml):domainName}
+    stage: ${file(variables/variables.yaml):stage}
+    basePath: ''
+    certificateName: ${file(variables/variables.yaml):certificateName}
+    certificateArn: ${file(variables/variables.yaml):certificateArn}
+    hostedZoneId: ${file(variables/variables.yaml):hostedZoneId}
+    createRoute53Record: true
+    endpointType: REGIONAL
+    securityPolicy: tls_1_2
+    apiType: rest
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  api:
+    handler: handler.helloWorld
+    events:
+      - http:
+          path: helloWorld
+          method: get
+          cors: true
+  helloPost:
+    handler: handler.helloPost
+    events:
+      - http:
+          path: helloPost
+          method: post
+          cors: true
+    environment:
+      NOTION_CLIENT_ID: ${file(variables/variables.yaml):NOTION_CLIENT_ID}
+      NOTION_CLIENT_SECRET: ${file(variables/variables.yaml):NOTION_CLIENT_SECRET}
+  getAuthToken:
+    handler: handler.getAuthToken
+    events:
+      - http:
+          path: authToken
+          method: post
+          cors: true
+    environment:
+      NOTION_CLIENT_ID: ${file(variables/variables.yaml):NOTION_CLIENT_ID}
+      NOTION_CLIENT_SECRET: ${file(variables/variables.yaml):NOTION_CLIENT_SECRET}
