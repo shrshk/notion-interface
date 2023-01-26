@@ -50,3 +50,10 @@ functions:
     environment:
       NOTION_CLIENT_ID: ${file(variables/variables.yaml):NOTION_CLIENT_ID}
       NOTION_CLIENT_SECRET: ${file(variables/variables.yaml):NOTION_CLIENT_SECRET}
+  markdownToNotion:
+    handler: handler.markdownToNotion
+    events:
+      - http:
+          path: markdownToNotion
+          method: post
+          cors: true

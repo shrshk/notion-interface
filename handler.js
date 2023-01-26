@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import { Buffer } from "buffer";
+import { markdownToBlocks } from "@tryfabric/martian";
 
 export const helloWorld = async (event) => {
   return {
@@ -26,6 +27,33 @@ export const helloPost = async (event) => {
     }),
   };
 };
+
+export const markdownToNotion = async (event) => {
+  console.log("event ", event)
+  const body = JSON.parse(event.body)
+  const { markdown } = body;
+
+  if (markdown == null) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: 'no markdown provided'
+      })
+    }
+  }
+
+  const notionBlocks = markdownToBlocks(markdown)
+
+  console.log('notion blocks ', JSON.stringify(notionBlocks))
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      notionBlocks
+    })
+  }
+
+}
 
 export const getAuthToken = async (event) => {
   console.log("event: ",event);
