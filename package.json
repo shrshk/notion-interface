@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
+    "@tryfabric/martian": "^1.2.4",
     "node-fetch": "^3.3.0",
     "serverless-domain-manager": "^6.2.1"
   }
