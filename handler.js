@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import { Buffer } from "buffer";
-import { markdownToBlocks } from "@tryfabric/martian";
+import { markdownToBlocks, markdownToRichText } from "@tryfabric/martian";
 
 export const helloWorld = async (event) => {
   return {
@@ -32,6 +32,7 @@ export const markdownToNotion = async (event) => {
   console.log("event ", event)
   const body = JSON.parse(event.body)
   const { markdown } = body;
+  const { method } = body;
 
   if (markdown == null) {
     return {
@@ -42,9 +43,13 @@ export const markdownToNotion = async (event) => {
     }
   }
 
-  const notionBlocks = markdownToBlocks(markdown)
+  let notionBlocks;
 
-  console.log('notion blocks ', JSON.stringify(notionBlocks))
+  if (method!=null && method==='markdownToRichText') {
+    notionBlocks = markdownToBlocks(markdown)
+  } else {
+    notionBlocks = markdownToRichText(markdown)
+  }
 
   return {
     statusCode: 200,
