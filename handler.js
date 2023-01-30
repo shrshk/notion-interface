@@ -63,17 +63,17 @@ export const markdownToNotion = async (event) => {
 export const getAuthToken = async (event) => {
   console.log("event: ",event);
   const body = JSON.parse(event.body);
-  const { code } = body;
-  if (code == null) {
+  const { code, redirectUri } = body;
+  if (code == null || redirectUri == null) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: 'no code provided'
+        error: 'no code or redirectUri provided'
       })
     }
   }
   try {
-    const data = await exchangeCodeForAuthToken(code);
+    const data = await exchangeCodeForAuthToken(code, redirectUri);
     return {
       statusCode: 200,
       body: JSON.stringify(
@@ -91,7 +91,7 @@ export const getAuthToken = async (event) => {
   }
 };
 
-async function exchangeCodeForAuthToken(code) {
+async function exchangeCodeForAuthToken(code, redirectUri) {
   try {
     const CLIENT_ID = process.env.NOTION_CLIENT_ID
     const CLIENT_SECRET = process.env.NOTION_CLIENT_SECRET
@@ -106,7 +106,7 @@ async function exchangeCodeForAuthToken(code) {
       body: JSON.stringify({
         code: code,
         grant_type: 'authorization_code',
-        redirect_uri: 'https://imocncpeeakpboalpdainlkaabcjjghd.chromiumapp.org/options.html'
+        redirect_uri: redirectUri
       })
     });
     const notionResponse = await response.json();
