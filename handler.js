@@ -2,32 +2,6 @@ import fetch from "node-fetch";
 import { Buffer } from "buffer";
 import { markdownToBlocks, markdownToRichText } from "@tryfabric/martian";
 
-export const helloWorld = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: "Go Serverless v2.0! Your function executed successfully!",
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
-};
-
-export const helloPost = async (event) => {
-  console.log("event: ",event);
-  const body = JSON.parse(event.body);
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Hello, ' + body.name,
-      clientID: process.env.NOTION_CLIENT_ID
-    }),
-  };
-};
-
 export const markdownToNotion = async (event) => {
   console.log("event ", event)
   const body = JSON.parse(event.body)
@@ -91,7 +65,7 @@ export const getAuthToken = async (event) => {
   }
 };
 
-async function exchangeCodeForAuthToken(code, redirectUri) {
+async function exchangeCodeForAuthToken(code) {
   try {
     const CLIENT_ID = process.env.NOTION_CLIENT_ID
     const CLIENT_SECRET = process.env.NOTION_CLIENT_SECRET
@@ -106,12 +80,10 @@ async function exchangeCodeForAuthToken(code, redirectUri) {
       body: JSON.stringify({
         code: code,
         grant_type: 'authorization_code',
-        redirect_uri: redirectUri
+        redirect_uri
       })
     });
-    const notionResponse = await response.json();
-    console.log('response from notion is ' + JSON.stringify(notionResponse))
-    return notionResponse
+    return await response.json()
   } catch (error) {
     console.error('error from notion' + error);
   }

@@ -23,23 +23,6 @@ provider:
   runtime: nodejs14.x
 
 functions:
-  api:
-    handler: handler.helloWorld
-    events:
-      - http:
-          path: helloWorld
-          method: get
-          cors: true
-  helloPost:
-    handler: handler.helloPost
-    events:
-      - http:
-          path: helloPost
-          method: post
-          cors: true
-    environment:
-      NOTION_CLIENT_ID: ${file(variables/variables.yaml):NOTION_CLIENT_ID}
-      NOTION_CLIENT_SECRET: ${file(variables/variables.yaml):NOTION_CLIENT_SECRET}
   getAuthToken:
     handler: handler.getAuthToken
     events:
